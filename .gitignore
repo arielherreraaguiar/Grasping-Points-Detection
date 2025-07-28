@@ -1,5 +1,6 @@
 Towel-scenes-custom/*
 !Towel-scenes-custom/cloth-blender_custom.py
+!Towel-scenes-custom/draw_keypoints.py
 !Towel-scenes-custom/README.md
 !Towel-scenes-custom/textures/
 !Towel-scenes-custom/textures/**
