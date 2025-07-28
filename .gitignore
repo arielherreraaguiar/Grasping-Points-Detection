@@ -7,7 +7,5 @@ Towel-scenes-custom/*
 !Towel-scenes-custom/images/**
 !Towel-scenes-custom/textures_table/
 !Towel-scenes-custom/textures_table/**
-Towel-scenes-custom/images/*.png
-Towel-scenes-custom/images/*.jpg
 Towel-scenes-Blender-own-code/towel_output/*.png
 Towel-scenes-Blender-own-code/towel_output/*.jpg
