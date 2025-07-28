@@ -5,11 +5,16 @@ import numpy as np
 from random import sample
 from mathutils import *
 
-# Keep track of textures already used
+# Keep track of cloth textures already used
 used_textures = set()
 
+# Define the directory where table textures are located
+table_texture_dir = "/home/ariel/Downloads/Thesis_CV/Grasping-Points-Detection/Towel-scenes-custom/textures_table"
+all_table_textures = [os.path.join(table_texture_dir, f) for f in os.listdir(table_texture_dir) if f.endswith(('.jpg', '.png'))]
+table_texture_queue = []
+
 def clear_scene():
-    """Clear all objects and unused data blocks from the scene"""
+    """Remove all objects and unused data blocks from the scene"""
     for block in bpy.data.meshes:
         if block.users == 0:
             bpy.data.meshes.remove(block)
@@ -25,19 +30,28 @@ def clear_scene():
     bpy.ops.object.select_all(action='SELECT')
     bpy.ops.object.delete(use_global=False)
 
-def make_table():
-    """Create a large flat plane to simulate a table, with light brown color"""
+def make_table(texture_queue):
+    """Create a table surface with a texture selected randomly from a non-repeating queue"""
     bpy.ops.mesh.primitive_plane_add(size=4, location=(0,0,0))
     table = bpy.context.object
-    mat = bpy.data.materials.new(name="TableColor")
-    mat.diffuse_color = (0.72, 0.53, 0.04, 1)
-    mat.use_nodes = False
+    mat = bpy.data.materials.new(name="TableTexture")
+    mat.use_nodes = True
+    nodes = mat.node_tree.nodes
+    links = mat.node_tree.links
+
+    bsdf = nodes.get("Principled BSDF")
+    tex_image = nodes.new("ShaderNodeTexImage")
+
+    tex_file = texture_queue.pop(0)
+    tex_image.image = bpy.data.images.load(tex_file)
+
+    links.new(tex_image.outputs["Color"], bsdf.inputs["Base Color"])
     table.data.materials.append(mat)
     bpy.ops.object.modifier_add(type='COLLISION')
     return table
 
 def make_cloth():
-    """Create the cloth object and apply physical simulation modifiers"""
+    """Create the cloth mesh and apply necessary physics modifiers"""
     bpy.ops.mesh.primitive_plane_add(size=2, location=(0,0,0))
     bpy.ops.object.modifier_add(type='COLLISION')
     bpy.ops.object.editmode_toggle()
@@ -52,7 +66,7 @@ def make_cloth():
     return bpy.context.object
 
 def generate_cloth_state(cloth):
-    """Randomize cloth position and pin a few vertices"""
+    """Randomly move the cloth and pin a few vertices to simulate variation"""
     dx = np.random.uniform(0,0.7)*random.choice((-1,1))
     dy = np.random.uniform(0,0.7)*random.choice((-1,1))
     dz = np.random.uniform(0.4,0.8)
@@ -70,13 +84,13 @@ def generate_cloth_state(cloth):
     return cloth
 
 def reset_cloth(cloth):
-    """Reset cloth location and remove pinned vertices"""
+    """Reset the cloth location and unpin any pinned vertices"""
     cloth.modifiers["Cloth"].settings.vertex_group_mass = ''
     cloth.location = (0,0,0)
     bpy.context.scene.frame_set(0)
 
 def pattern(obj, texture_filename, apply_tint=False):
-    """Apply an image texture to the cloth, with optional color tint if reused"""
+    """Apply a texture to the cloth with optional color tint if reused"""
     mat = bpy.data.materials.new(name="ImageTexture")
     mat.use_nodes = True
     nodes = mat.node_tree.nodes
@@ -99,7 +113,7 @@ def pattern(obj, texture_filename, apply_tint=False):
     obj.data.materials.append(mat)
 
 def add_camera_light():
-    """Add a POINT light and a camera facing downward"""
+    """Add a POINT light source with random position and intensity, and add a top-down camera"""
     bpy.ops.object.light_add(type='POINT', location=(
         random.uniform(-3, 3), random.uniform(-3, 3), random.uniform(4, 6)))
     light = bpy.context.object
@@ -109,7 +123,7 @@ def add_camera_light():
     bpy.context.scene.camera = bpy.context.object
 
 def render(filename, episode):
-    """Render 10 frames per episode (every 3 frames from a 30-frame sim)"""
+    """Render 10 images per episode (sampled every 3 frames from 30-frame sim)"""
     scene = bpy.context.scene
     scene.render.engine = "BLENDER_EEVEE"
     scene.render.filepath = "./images/{}".format(filename)
@@ -124,7 +138,7 @@ def render(filename, episode):
         scene.frame_set(frame)
 
 def render_dataset(num_episodes, filename, render_width=640, render_height=480):
-    """Main rendering loop with texture reuse tracking and conditional tinting"""
+    """Main loop that orchestrates generation of cloth and table textures for each episode"""
     scene = bpy.context.scene
     scene.render.resolution_percentage = 100
     scene.render.resolution_x = render_width
@@ -133,20 +147,25 @@ def render_dataset(num_episodes, filename, render_width=640, render_height=480):
     all_textures = [f for f in os.listdir('textures') if f.endswith(('.jpg', '.png'))]
     texture_queue = []
 
+    global table_texture_queue
+    table_texture_queue = []
+
     for episode in range(num_episodes):
         global iteration
         iteration = episode
         clear_scene()
         add_camera_light()
-        make_table()
+
+        if not table_texture_queue:
+            table_texture_queue = random.sample(all_table_textures, len(all_table_textures))
+        make_table(table_texture_queue)
+
         cloth = make_cloth()
 
         if not texture_queue:
             texture_queue = random.sample(all_textures, len(all_textures))
-
         tex_file = texture_queue.pop(0)
         full_path = os.path.join('textures', tex_file)
-
         apply_tint = tex_file in used_textures
         pattern(cloth, full_path, apply_tint=apply_tint)
         used_textures.add(tex_file)
@@ -162,5 +181,5 @@ if __name__ == '__main__':
         os.system('rm -r ./images')
         os.makedirs('./images')
     filename = "images/%06d_rgb.png"
-    render_dataset(500, filename)  # 500 episodes × 10 images = 5000 total
+    render_dataset(500, filename)
     print("Rendering complete. Check the 'images' directory for output.")
