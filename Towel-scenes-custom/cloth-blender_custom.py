@@ -181,5 +181,5 @@ if __name__ == '__main__':
         os.system('rm -r ./images')
         os.makedirs('./images')
     filename = "images/%06d_rgb.png"
-    render_dataset(500, filename)
+    render_dataset(500, filename) # 500 episodes × 10 images = 5000 total
     print("Rendering complete. Check the 'images' directory for output.")
