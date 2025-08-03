@@ -1,14 +1,11 @@
 Towel-scenes-custom/*
 !Towel-scenes-custom/cloth-blender_custom.py
 !Towel-scenes-custom/draw_keypoints.py
+!Towel-scenes-custom/split_dataset.py
 !Towel-scenes-custom/README.md
 !Towel-scenes-custom/textures/
 !Towel-scenes-custom/textures/**
-!Towel-scenes-custom/images/
-!Towel-scenes-custom/images/**
 !Towel-scenes-custom/textures_table/
 !Towel-scenes-custom/textures_table/**
-Towel-scenes-custom/images/**
-Towel-scenes-custom/images/**
 Towel-scenes-Blender-own-code/towel_output/**
 Towel-scenes-Blender-own-code/towel_output/**
