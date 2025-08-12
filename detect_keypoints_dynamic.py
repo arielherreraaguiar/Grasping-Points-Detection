@@ -7,7 +7,7 @@ from keypoint_detection.models.detector import KeypointDetector
 from keypoint_detection.utils.heatmap import get_keypoints_from_heatmap
 
 # === Parameters ===
-checkpoint_path = "model.ckpt"
+checkpoint_path = "keypoint_unet_best.ckpt"
 network_image_size = 256
 heatmap_threshold = 25
 n_keypoints = 4
