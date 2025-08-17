@@ -9,8 +9,8 @@ from keypoint_detection.models.detector import KeypointDetector
 from keypoint_detection.utils.heatmap import get_keypoints_from_heatmap
 
 # === Parameters ===
-image_path = "/home/ariel/Downloads/Thesis_CV/Grasping-Points-Detection/Test_Images/towel6.png"
-checkpoint_path = "model.ckpt"
+image_path = "/home/ariel/Downloads/Thesis_CV/Grasping-Points-Detection/Towel-scenes-custom/final_dataset/test/000468_rgb.png"
+checkpoint_path = "model_Ghent.ckpt"
 network_image_size = 256
 heatmap_threshold = 25
 n_keypoints = 4
@@ -84,9 +84,9 @@ if len(keypoints) == 4:
     grasp2 = right_edge_mid + unit_vec * inward_margin
 
     # Draw red grasping points
-    for gp in [grasp1, grasp2]:
-        x, y = int(gp[0]), int(gp[1])
-        cv2.circle(img_bgr, (x, y), 6, (0, 0, 255), -1)
+    # for gp in [grasp1, grasp2]:
+    #     x, y = int(gp[0]), int(gp[1])
+    #     cv2.circle(img_bgr, (x, y), 6, (0, 0, 255), -1)
 
     # Print coordinates
     print(f"Grasping Point 1 (left, inward): {grasp1}")

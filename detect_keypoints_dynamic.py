@@ -107,9 +107,9 @@ try:
             grasp2 = mid2 + unit_dir * inward_margin
 
             # Draw red grasping points
-            for gp in [grasp1, grasp2]:
-                x, y = int(gp[0]), int(gp[1])
-                cv2.circle(img_bgr, (x, y), 6, (0, 0, 255), -1)
+            # for gp in [grasp1, grasp2]:
+            #     x, y = int(gp[0]), int(gp[1])
+            #     cv2.circle(img_bgr, (x, y), 6, (0, 0, 255), -1)
 
             # Print coordinates
             print(f"Grasping Point 1: {grasp1}")
