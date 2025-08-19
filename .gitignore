@@ -7,5 +7,6 @@ Towel-scenes-custom/*
 !Towel-scenes-custom/textures/**
 !Towel-scenes-custom/textures_table/
 !Towel-scenes-custom/textures_table/**
+!Towel-scenes-custom/docs/
 !Towel-scenes-custom/docs/**
 Extras/**
