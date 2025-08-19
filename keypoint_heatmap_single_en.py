@@ -1,8 +1,8 @@
 # keypoint_heatmap_single_en.py
 # ------------------------------------------------------------
-# HeatmapNet: pequeño U-Net que produce 1 heatmap (esquinas visibles como picos).
-# Coincide con la arquitectura de tu notebook (encoders 64/128/256, stride=4).
-# Incluye utilidades: topk_peaks y order_tl_tr_br_bl.
+# HeatmapNet: small U-Net that produces 1 heatmap (visible corners as peaks).
+# Matches the architecture of your notebook (encoders 64/128/256, stride=4).
+# Includes utilities: topk_peaks and order_tl_tr_br_bl.
 # ------------------------------------------------------------
 
 from typing import List, Tuple
@@ -11,12 +11,12 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-# Tamaño de entrada y stride como en tu notebook
+# Input size and stride as in your notebook
 IMG_SIZE = 256
-HEAT_STRIDE = 4  # -> heatmap de 64x64
+HEAT_STRIDE = 4  # -> heatmap of 64x64
 
 # -------------------------
-# Bloques (tipo U-Net)
+# Blocks (U-Net type)
 # -------------------------
 def _block(in_ch, out_ch):
     return nn.Sequential(
@@ -29,7 +29,7 @@ def _block(in_ch, out_ch):
     )
 
 class HeatmapNet(nn.Module):
-    """U-Net pequeño → 1 heatmap (logits) reescalado a (IMG_SIZE/HEAT_STRIDE)."""
+    """Small U-Net → 1 heatmap (logits) rescaled to (IMG_SIZE/HEAT_STRIDE)."""
     def __init__(self, out_ch: int = 1):
         super().__init__()
         # Encoder
@@ -41,7 +41,7 @@ class HeatmapNet(nn.Module):
         self.pool3 = nn.MaxPool2d(2)     # 64  -> 32
         self.bott = _block(256, 256)
 
-        # Decoder (ojo con canales de concat)
+        # Decoder (be careful with concat channels)
         self.up1  = nn.ConvTranspose2d(256, 128, 2, stride=2)      # 32 -> 64
         self.dec1 = _block(128 + 256, 128)
 
@@ -69,7 +69,7 @@ class HeatmapNet(nn.Module):
         d3 = self.dec3(torch.cat([u3, e1], dim=1))
 
         y  = self.out(d3)  # [B,1,256,256] logits
-        # Reescala a 64x64 (stride 4) como en tu notebook
+        # Rescale to 64x64 (stride 4) as in your notebook
         y  = F.interpolate(
             y,
             size=(IMG_SIZE // HEAT_STRIDE, IMG_SIZE // HEAT_STRIDE),
@@ -78,16 +78,16 @@ class HeatmapNet(nn.Module):
         return y  # logits (no sigmoid)
 
 # -------------------------
-# Utilidades
+# Utilities
 # -------------------------
 def topk_peaks(heat_np: np.ndarray, K: int = 4, thresh: float = 0.25):
     """
-    Extrae hasta K picos [x,y,score] de un heatmap (numpy) en [0,1].
-    heat_np: (H,W) después de sigmoid.
+    Extract up to K peaks [x,y,score] from a heatmap (numpy) in [0,1].
+    heat_np: (H,W) after sigmoid.
     """
     H, W = heat_np.shape
     flat = heat_np.reshape(-1)
-    idxs = np.argsort(-flat)  # descendente
+    idxs = np.argsort(-flat)  # descending
     peaks = []
     taken = np.zeros_like(flat, dtype=bool)
     for idx in idxs:
@@ -104,13 +104,13 @@ def topk_peaks(heat_np: np.ndarray, K: int = 4, thresh: float = 0.25):
 
 def order_tl_tr_br_bl(points_xy: np.ndarray) -> np.ndarray:
     """
-    Heurística para ordenar 4 puntos como (TL, TR, BR, BL).
-    Devuelve array Nx2; si N!=4, retorna entrada sin cambios.
+    Heuristic to order 4 points as (TL, TR, BR, BL).
+    Returns Nx2 array; if N!=4, returns input unchanged.
     """
     if points_xy is None or len(points_xy) != 4:
         return points_xy
     pts = np.array(points_xy, dtype=np.float32)
-    # Ordena por Y (arriba->abajo), luego por X
+    # Sort by Y (top->bottom), then by X
     idx = np.lexsort((pts[:,0], pts[:,1]))
     pts = pts[idx]
     top = pts[:2][np.argsort(pts[:2,0])]
@@ -119,9 +119,10 @@ def order_tl_tr_br_bl(points_xy: np.ndarray) -> np.ndarray:
     BL, BR = bot[0], bot[1]
     return np.stack([TL, TR, BR, BL], axis=0)
 
-# Autotest rápido
+# Quick autotest
 if __name__ == "__main__":
     net = HeatmapNet(out_ch=1)
     x = torch.randn(1,3,256,256)
     y = net(x)
     print("Output shape:", tuple(y.shape))  # (1,1,64,64)
+
