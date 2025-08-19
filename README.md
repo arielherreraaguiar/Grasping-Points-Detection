@@ -39,13 +39,13 @@ This directory contains all scripts for **dataset generation and preprocessing**
 ---
 
 ### Main Directory
-Outside `Towel-scenes-custom/`, you will find **model and evaluation scripts**.
+You will find **model and evaluation scripts**.
 
 - **`best_heatmap.pth`**  
   Pretrained model (trained on the generated dataset).  
 
 - **`eval.py`**  
-  Script to evaluate the pretrained model on a dataset.  
+  Script to evaluate the pretrained model on the test dataset.  
 
 - **`realtime_keypoints.py`**  
   Real-time visualization of detected keypoints using an **Intel RealSense RGBD camera**.  
@@ -55,64 +55,95 @@ Outside `Towel-scenes-custom/`, you will find **model and evaluation scripts**.
 ## 🖼️ Example Outputs
 
 - **Synthetic Dataset Example (Blender-generated)**  
-  ![Example Image](docs/example_dataset.png)
+  ![Example Image](Towel-scenes-custom/docs/fig36.png)
 
-- **Corners Visualization (`draw_keypoints.py`)**  
-  ![Corners](docs/example_corners.png)
+- **Keypoints Evaluation (`eval.py`)**  
+  ![Corners](Towel-scenes-custom/docs/fig38.png)
 
 - **Real-Time Keypoints Detection**  
-  ![Realtime](docs/example_realtime.png)
+  ![Realtime](Towel-scenes-custom/docs/fig40.png)
+
+---
+
+# Towel Scene Generator with Blender 2.8
+
+This script generates synthetic images of a deformable towel using Blender 2.8, simulating realistic cloth folding and indoor lighting conditions.
+
+---
+
+## 💡 Features
+
+- Procedural cloth generation with physics simulation
+- Random initial positions, rotations, and pinned vertices
+- Table surface for realistic interaction
+- High-quality fabric textures from the `textures/` folder, Blender, and external sources: **AmbientCG, CGBookcase, PolyHaven**
+- Smart coloring logic:
+  - First time a texture is used → no tint (original color)
+  - If a texture is reused → apply a random color tint
+- Indoor lighting using a randomized `POINT` light source
+
+---
+
+## 🖼️ Output
+
+- All images are saved to the `images/` folder
+- Each simulation (episode) renders 10 frames (sampled every 3 frames over a 30-frame simulation)
+- The full run generates **5000 images** across 500 randomized cloth drops
 
 ---
 
 ## 🚀 How to Run
 
-### 1. Dataset Generation
-Run the Blender generator (requires **Blender 2.80**):
+Make sure you are using **Blender 2.80** and that the alias `blender2.8` is set in your terminal.
+
+### 1. 📥 Download Blender 2.80 (Linux)
+
+Download from the official archive:  
+[https://download.blender.org/release/Blender2.80/](https://download.blender.org/release/Blender2.80/)
+
+Example:
+
+```bash
+cd ~/programs
+wget https://download.blender.org/release/Blender2.80/blender-2.80-linux-glibc217-x86_64.tar.bz2
+tar -xjf blender-2.80-linux-glibc217-x86_64.tar.bz2
+mv blender-2.80-linux-glibc217-x86_64 blender2.8
+```
+
+### 2. 🧠 Set the alias
+
+Open your `.bashrc` or `.zshrc` and add:
+
+```bash
+alias blender2.8="$HOME/programs/blender2.8/blender"
+```
+
+Then reload your shell:
+
+```bash
+source ~/.bashrc
+```
+
+### 3. ✅ Run the generator
 
 ```bash
 blender2.8 -b -P cloth-blender_custom.py
-```
-
-### 2. Keypoints Visualization
-```bash
-python draw_keypoints.py
-```
-
-### 3. Dataset Split
-```bash
-python split_dataset.py
-```
-
-### 4. Model Training (Google Colab)
-Follow the notebook:  
-[Training Notebook](https://colab.research.google.com/drive/1vDwQTSIpFn1aj6c4Ux8AAtADVSatG2aI?usp=sharing)
-
-### 5. Evaluation
-```bash
-python eval.py
-```
-
-### 6. Real-Time Detection
-```bash
-python realtime_keypoints.py
 ```
 
 ---
 
 ## 🔧 Environment
 
-- Blender **2.80** (Linux recommended)  
-- Python 3.8+  
-- PyTorch, NumPy, OpenCV  
-- Intel RealSense SDK (for real-time keypoints detection)  
+It is recommended to use **Conda** and create the environment with the provided `.yml` file to install all dependencies.  
+Includes support for **Intel RealSense RGBD camera** for real-time keypoints detection.
 
 ---
 
 ## 📚 Attribution
 
-This repository adapts and extends the original towel simulation code from:  
-[https://github.com/priyasundaresan/cloth-rendering](https://github.com/priyasundaresan/cloth-rendering)
+The towel scene generation code is adapted from:  
+[https://github.com/priyasundaresan/cloth-rendering](https://github.com/priyasundaresan/cloth-rendering)  
+All dataset generation, keypoint handling, splitting, and deep learning model training were implemented in this repository.
 
 ---
 
