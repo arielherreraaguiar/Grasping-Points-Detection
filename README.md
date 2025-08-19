@@ -72,13 +72,6 @@ Includes support for **Intel RealSense RGBD camera** for real-time keypoints det
 
 ---
 
-## 📚 Attribution
-
-The towel scene generation code is adapted from:  
-[https://github.com/priyasundaresan/cloth-rendering](https://github.com/priyasundaresan/cloth-rendering)  
-All dataset generation, keypoint handling, splitting, and deep learning model training were implemented in this repository.
-
----
 
 ## ✨ Summary
 
