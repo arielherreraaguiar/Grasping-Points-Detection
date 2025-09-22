@@ -10,3 +10,11 @@ Towel-scenes-custom/*
 !Towel-scenes-custom/docs/
 !Towel-scenes-custom/docs/**
 Extras/**
+Keypoints-wrinkles-detection/*
+!Keypoints-wrinkles-detection/keypoint_heatmap_single_en.py
+!Keypoints-wrinkles-detection/keypoints-generator.py
+!Keypoints-wrinkles-detection/new-dataset-merge.py
+!Keypoints-wrinkles-detection/rename_merge.py
+!Keypoints-wrinkles-detection/scene-generator.py
+!Keypoints-wrinkles-detection/scene-wrinkle-training.py
+!Keypoints-wrinkles-detection/wrinkles-generator.py
