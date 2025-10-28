@@ -23,9 +23,9 @@ OUTPUT_DIR = "corners"
 WEIGHTS    = "/home/ariel/Downloads/Thesis_CV/Grasping-Points-Detection/best_heatmap.pth"
 IMG_SIZE   = 256
 TOPK       = 50      # more candidates (before NMS)
-THRESH     = 0.35
+THRESH     = 0.15
 REFINE_WIN = 3
-NMS_RADIUS = 20      # radius in pixels for suppression
+NMS_RADIUS = 50     # radius in pixels for suppression
 MAX_POINTS = 4       # keep up to 4 final points
 # =========================
 

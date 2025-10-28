@@ -18,7 +18,7 @@ from ultralytics import YOLO
 from scipy.spatial import distance
 
 # ================= USER CONFIG =================
-MODEL_PATH = "best.pt"     # Ruta a tu modelo YOLO
+MODEL_PATH = "best-old.pt"     # Ruta a tu modelo YOLO
 IMAGES_DIR = "images"      # Carpeta de entrada
 MASKS_DIR  = "masks"       # Carpeta de salida
 CONF_THRES = 0.15
