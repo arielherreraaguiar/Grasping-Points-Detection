@@ -1,85 +1,52 @@
-# CV Grasping Points Detection in Textiles
+# CV Keypoints and Wrinkle Detection in Textiles
 
-This project focuses on identifying the best grasping points to unfold a piece of cloth using a robotic arm.  
-The chosen strategy is to detect **keypoints at the corners of the cloth** (up to 4 points if all are visible).  
+## 📖 Overview
+This repository allows you to train and evaluate deep learning models designed to identify keypoints (corners) and segment wrinkles in textiles. The ultimate goal is to find the best grasping points to unfold a piece of cloth using a robotic arm.
 
-The repository allows you to **generate a custom dataset of towels (folded and flat) in Blender**, process it into COCO format, and then **train a deep learning model based on heatmaps** to detect keypoints.  
-A pretrained model is also provided for evaluation and real-time testing with an Intel RealSense RGBD camera.
+The repository is organized into four main directories, each serving a specific purpose in the pipeline: from synthetic dataset generation to real-time evaluation.
 
 ---
 
 ## 📂 Repository Structure
 
-### `Towel-scenes-custom/`
-This directory contains all scripts for **dataset generation and preprocessing**.
+### 1. `Towel-scenes-custom/`
+This directory contains scripts to generate virtual scenes using **Blender 2.80**. 
+* It generates synthetic datasets of cloths in various folding positions, colors, and textures.
+* It outputs the annotations in a **COCO-style JSON file** required for training the models.
+* **Colab Notebook for Training:** You can train the keypoint detection model using the generated dataset here: [Keypoints Training Notebook](https://colab.research.google.com/drive/1vDwQTSIpFn1aj6c4Ux8AAtADVSatG2aI?usp=sharing).
 
-- **`cloth-blender_custom.py`**  
-  Main script to generate synthetic towel images using **Blender 2.80**. For more information on how to run this code, please read the README file inside the `Towel-scenes-custom/` directory. 
-  - Saves rendered images in `images/`  
-  - Generates a **COCO-style JSON file** `dataset_coco.json` inside `images/`, which stores the **corner positions in pixel coordinates**  
+**Synthetic Dataset Example (Blender-generated):** ![COCO-style JSON](Towel-scenes-custom/docs/fig36.png)
 
-- **`draw_keypoints.py`**  
-  Visualization tool to validate the JSON annotations.  
-  - Creates a directory `corners/`  
-  - Saves all images from `images/`, this time with **red dots marking the towel corners**
+### 2. `keypoint-detection/`
+This directory is dedicated to the detection of the towel's corners (up to 4 keypoints). It contains the final trained model and scripts for both static and real-time evaluation.
+* **`best_heatmap.pth`**: The final pretrained model based on heatmaps.
+* **`eval.py`**: Script to statically evaluate the pretrained model on test images.
+* **`realtime_keypoints.py`**: Script for real-time visualization of detected keypoints using an **Intel RealSense RGBD camera**.
 
-- **`split_dataset.py`**  
-  Splits the dataset into `final_dataset/` with three subfolders:  
-  - `train/` → 80% of the images  
-  - `val/` → 20% of the images  
-  - `test/` → remaining 20% of the images  
-  Each folder contains its own **`dataset_coco.json`** file.  
+**Keypoints Evaluation:** ![Corners](Towel-scenes-custom/docs/fig38.png)  
+**Real-Time Keypoints Detection:** ![Realtime](Towel-scenes-custom/docs/fig40.png)
 
-> 💡 Tip: For training, it is recommended to compress the folder `final_dataset/` as `final_dataset.zip` and upload it to Google Drive.  
+### 3. `wrinkle-segmentation/`
+This directory focuses on detecting and analyzing wrinkles on the cloth. 
+* **How the Algorithm Works**: The pipeline uses a YOLOv8 model to detect bounding boxes around wrinkles. It then applies computer vision techniques (Edge detection and Morphological operations) inside the detected regions to extract the contours. Finally, it identifies the longest contour, uses a Convex Hull to find the farthest points within that contour, and draws a line to determine the maximum length of the main wrinkle.
+* **Roboflow & Training**: The YOLOv8 model was trained on a dataset hosted in Roboflow.
+* **Colab Notebooks**:
+    * [Wrinkle Training Notebook](https://colab.research.google.com/drive/1Kn5kF8jvKpI50eObxHSCjKAVuxXxTHC1?usp=sharing)
+    * [Wrinkle Static Inference Notebook](https://colab.research.google.com/drive/12kBpE8gECRDdIp1zmT7XGCZ3YESo1MEW?usp=sharing)
 
-- **Google Colab Notebook for Training**  
-  Train the deep learning model using the generated dataset:  
-  [Training Notebook](https://colab.research.google.com/drive/1vDwQTSIpFn1aj6c4Ux8AAtADVSatG2aI?usp=sharing)
+**Wrinkle Segmentation Results:** ![Wrinkle Segmentation 1](Towel-scenes-custom/docs/seg1.png)  
+![Wrinkle Segmentation 2](Towel-scenes-custom/docs/seg2.png)
 
----
-
-### Main Directory
-You will find **model and evaluation scripts**.
-
-- **`best_heatmap.pth`**  
-  Pretrained model (trained on the generated dataset).  
-
-- **`eval.py`**  
-  Script to evaluate the pretrained model on the test dataset.  
-
-- **`realtime_keypoints.py`**  
-  Real-time visualization of detected keypoints using an **Intel RealSense RGBD camera**.  
+### 4. `test_dataset_keypoints_wrinkles/`
+This directory contains scripts specifically designed to test both methods (keypoints and wrinkles) on purely digital datasets generated via Blender. It reads the raw simulated images, runs the models, and outputs the bounding boxes, segmentations, and keypoint visualizations into separate subfolders for analysis.
 
 ---
 
-## 🖼️ Example Outputs
+## 🔧 Environments & Dependencies
 
-- **Synthetic Dataset Example (Blender-generated)**  
-  ![Example Image](Towel-scenes-custom/docs/fig36.png)
+It is highly recommended to use **Conda** to manage dependencies. Because there are conflicts between specific versions of `numpy` and `ultralytics` required by the different models, **two separate Conda environments are used**.
 
-- **Keypoints Evaluation (`eval.py`)**  
-  ![Corners](Towel-scenes-custom/docs/fig38.png)
+1.  **Keypoints Environment**: Use the `env.yml` located inside the `keypoint-detection/` directory.
+2.  **Wrinkles Environment**: Use the `env.yml` located inside the `wrinkle-segmentation/` directory.
 
-- **Real-Time Keypoints Detection**  
-  ![Realtime](Towel-scenes-custom/docs/fig40.png)
-
----
-
-## 🔧 Environment
-
-It is recommended to use **Conda** and create the environment with the provided `.yml` file to install all dependencies.  
-Includes support for **Intel RealSense RGBD camera** for real-time keypoints detection.
-
----
-
-
-## ✨ Summary
-
-- Generate **synthetic datasets** of towels (folded and flat) with Blender  
-- Annotate corners in **COCO format**  
-- Visualize dataset with **red corner keypoints**  
-- Split into `train/`, `val/`, `test/`  
-- Train a **heatmap-based deep learning model**  
-- Evaluate and test **real-time detection** with a RealSense camera  
-
----
+Both environments include the necessary support and libraries (like `pyrealsense2`) to run real-time detections using an **Intel RealSense RGBD camera**.

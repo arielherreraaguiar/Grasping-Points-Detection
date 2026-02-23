@@ -9,8 +9,8 @@ Towel-scenes-custom/*
 !Towel-scenes-custom/textures_table/**
 !Towel-scenes-custom/docs/
 !Towel-scenes-custom/docs/**
-Extras/**
-test-keypoints-wrinkles/**
+Extras/
+test-keypoints-wrinkles/
 test_dataset_keypoints_wrinkles/*
 !test_dataset_keypoints_wrinkles/keypoint_heatmap_single_en.py
 !test_dataset_keypoints_wrinkles/keypoints-generator.py
@@ -18,3 +18,4 @@ test_dataset_keypoints_wrinkles/*
 !test_dataset_keypoints_wrinkles/wrinkles-generator.py
 !test_dataset_keypoints_wrinkles/README.md
 .vscode/
+simulation/
