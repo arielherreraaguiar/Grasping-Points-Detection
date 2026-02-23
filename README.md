@@ -24,7 +24,8 @@ This directory is dedicated to the detection of the towel's corners (up to 4 key
 * **`eval.py`**: Script to statically evaluate the pretrained model on test images.
 * **`realtime_keypoints.py`**: Script for real-time visualization of detected keypoints using an **Intel RealSense RGBD camera**.
 
-**Keypoints Evaluation:** ![Corners](Towel-scenes-custom/docs/fig38.png)  
+**Keypoints Evaluation:** ![Corners](Towel-scenes-custom/docs/fig38.png)
+
 **Real-Time Keypoints Detection:** ![Realtime](Towel-scenes-custom/docs/fig40.png)
 
 ### 3. `wrinkle-segmentation/`
@@ -35,7 +36,8 @@ This directory focuses on detecting and analyzing wrinkles on the cloth.
     * [Wrinkle Training Notebook](https://colab.research.google.com/drive/1Kn5kF8jvKpI50eObxHSCjKAVuxXxTHC1?usp=sharing)
     * [Wrinkle Static Inference Notebook](https://colab.research.google.com/drive/12kBpE8gECRDdIp1zmT7XGCZ3YESo1MEW?usp=sharing)
 
-**Wrinkle Segmentation Results:** ![Wrinkle Segmentation 1](Towel-scenes-custom/docs/seg1.png)  
+**Wrinkle Segmentation Results:** ![Wrinkle Segmentation 1](Towel-scenes-custom/docs/seg1.png)
+
 ![Wrinkle Segmentation 2](Towel-scenes-custom/docs/seg2.png)
 
 ### 4. `test_dataset_keypoints_wrinkles/`
@@ -50,4 +52,4 @@ It is highly recommended to use **Conda** to manage dependencies. Because there 
 1.  **Keypoints Environment**: Use the `env.yml` located inside the `keypoint-detection/` directory.
 2.  **Wrinkles Environment**: Use the `env.yml` located inside the `wrinkle-segmentation/` directory.
 
-Both environments include the necessary support and libraries (like `pyrealsense2`) to run real-time detections using an **Intel RealSense RGBD camera**.
+Both environments include the necessary support and libraries to run real-time detections using an **Intel RealSense RGBD camera**.
