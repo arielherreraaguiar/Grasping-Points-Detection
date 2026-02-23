@@ -14,6 +14,7 @@ This directory contains scripts to generate virtual scenes using **Blender 2.80*
 * It generates synthetic datasets of cloths in various folding positions, colors, and textures.
 * It outputs the annotations in a **COCO-style JSON file** required for training the models.
 * **Colab Notebook for Training:** You can train the keypoint detection model using the generated dataset here: [Keypoints Training Notebook](https://colab.research.google.com/drive/1vDwQTSIpFn1aj6c4Ux8AAtADVSatG2aI?usp=sharing).
+* **Credit:** The towel scene generation code is adapted from: [https://github.com/priyasundaresan/cloth-rendering](https://github.com/priyasundaresan/cloth-rendering).
 
 **Synthetic Dataset Example (Blender-generated):** ![COCO-style JSON](Towel-scenes-custom/docs/fig36.png)
 
@@ -29,7 +30,7 @@ This directory is dedicated to the detection of the towel's corners (up to 4 key
 ### 3. `wrinkle-segmentation/`
 This directory focuses on detecting and analyzing wrinkles on the cloth. 
 * **How the Algorithm Works**: The pipeline uses a YOLOv8 model to detect bounding boxes around wrinkles. It then applies computer vision techniques (Edge detection and Morphological operations) inside the detected regions to extract the contours. Finally, it identifies the longest contour, uses a Convex Hull to find the farthest points within that contour, and draws a line to determine the maximum length of the main wrinkle.
-* **Roboflow & Training**: The YOLOv8 model was trained on a dataset hosted in Roboflow.
+* **Dataset & Training**: The YOLOv8 model was trained on the [Wrinkle Detector 2.0 Dataset](https://universe.roboflow.com/fabric-accessor/wrinkle-detector-2.0) hosted on Roboflow. To improve the model's performance, this dataset was augmented with a custom dataset of 400 synthetic digital images generated in Blender. The wrinkles in these synthetic images were manually annotated using [AnyLabeling](https://github.com/vietanhdev/anylabeling).
 * **Colab Notebooks**:
     * [Wrinkle Training Notebook](https://colab.research.google.com/drive/1Kn5kF8jvKpI50eObxHSCjKAVuxXxTHC1?usp=sharing)
     * [Wrinkle Static Inference Notebook](https://colab.research.google.com/drive/12kBpE8gECRDdIp1zmT7XGCZ3YESo1MEW?usp=sharing)

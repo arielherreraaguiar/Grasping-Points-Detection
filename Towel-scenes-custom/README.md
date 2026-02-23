@@ -64,9 +64,3 @@ blender2.8 -b -P cloth-blender_custom.py
 ```
 
 ---
-## 📚 Attribution
-
-The towel scene generation code is adapted from:  
-[https://github.com/priyasundaresan/cloth-rendering](https://github.com/priyasundaresan/cloth-rendering)  
-
----
