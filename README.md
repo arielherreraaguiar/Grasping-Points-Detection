@@ -36,9 +36,9 @@ This directory focuses on detecting and analyzing wrinkles on the cloth.
     * [Wrinkle Training Notebook](https://colab.research.google.com/drive/1Kn5kF8jvKpI50eObxHSCjKAVuxXxTHC1?usp=sharing)
     * [Wrinkle Static Inference Notebook](https://colab.research.google.com/drive/12kBpE8gECRDdIp1zmT7XGCZ3YESo1MEW?usp=sharing)
 
-**Wrinkle Segmentation Results:** ![Wrinkle Segmentation 1](Towel-scenes-custom/docs/seg1.png)
+**Wrinkle Segmentation Results:** <img src="Towel-scenes-custom/docs/seg1.png" alt="Wrinkle Segmentation 1" width="400">
 
-![Wrinkle Segmentation 2](Towel-scenes-custom/docs/seg2.png)
+<img src="Towel-scenes-custom/docs/seg2.png" alt="Wrinkle Segmentation 2" width="400">
 
 ### 4. `test_dataset_keypoints_wrinkles/`
 This directory contains scripts specifically designed to test both methods (keypoints and wrinkles) on purely digital datasets generated via Blender. It reads the raw simulated images, runs the models, and outputs the bounding boxes, segmentations, and keypoint visualizations into separate subfolders for analysis.
