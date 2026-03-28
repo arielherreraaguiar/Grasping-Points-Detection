@@ -27,7 +27,8 @@ This directory is dedicated to the detection of the towel's corners (up to 4 key
 **Keypoints Evaluation:** ![Corners](Towel-scenes-custom/docs/fig38.png)
 
 **Real-Time Keypoints Detection:** ![Realtime](Towel-scenes-custom/docs/fig40.png)
-[![Real-Time Keypoints Detection Demo](https://img.youtube.com/vi/IzOsbfatxi0/maxresdefault.jpg)](https://youtu.be/IzOsbfatxi0?si=tAglc8GQvh2gbSt8)
+
+[![Real-Time Keypoints Detection Demo](https://img.youtube.com/vi/IzOsbfatxi0/hqdefault.jpg)](https://youtu.be/IzOsbfatxi0?si=tAglc8GQvh2gbSt8)
 
 ### 3. `wrinkle-segmentation/`
 This directory focuses on detecting and analyzing wrinkles on the cloth. 
