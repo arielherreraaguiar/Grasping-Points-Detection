@@ -25,9 +25,11 @@ This directory is dedicated to the detection of the towel's corners (up to 4 key
 * **`realtime_keypoints.py`**: Script for real-time visualization of detected keypoints using an **Intel RealSense RGBD camera**.
 
 **Keypoints Evaluation:** 
+
 ![Corners](Towel-scenes-custom/docs/fig38.png)
 
 **Real-Time Keypoints Detection:** 
+
 ![Realtime](Towel-scenes-custom/docs/fig40.png)
 
 [![Real-Time Keypoints Detection Demo](https://markdown-videos-api.jorgenkh.no/youtube/IzOsbfatxi0)](https://youtu.be/IzOsbfatxi0?si=tAglc8GQvh2gbSt8)
