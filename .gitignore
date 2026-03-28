@@ -19,3 +19,4 @@ test_dataset_keypoints_wrinkles/*
 !test_dataset_keypoints_wrinkles/README.md
 .vscode/
 simulation/
+__pycache__/
